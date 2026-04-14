@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>AppyClass — Interactive Demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700;9..144,800&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink:      #0A1F1C;
+  --ink2:     #132820;
+  --ink3:     #0E1E1C;
+  --teal:     #0E9B86;
+  --tealBr:   #32BCAD;
+  --tealPale: #E4F7F5;
+  --white:    #FFFFFF;
+  --muted:    #7AADA8;
+  --amber:    #F59E0B;
+  --coral:    #F43F5E;
+  --green:    #10B981;
+  --purple:   #8B5CF6;
+  --blue:     #3B82F6;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Sora', sans-serif;
+  background: var(--ink);
+  color: var(--white);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── Background orbs ── */
+.bg {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  overflow: hidden;
+}
+.orb {
+  position: absolute; border-radius: 50%;
+  filter: blur(80px);
+}
+.orb1 { width: 600px; height: 600px; background: rgba(50,188,173,.07); top:-200px; right:-100px; }
+.orb2 { width: 400px; height: 400px; background: rgba(14,155,134,.05); bottom:0; left:-100px; }
+.orb3 { width: 300px; height: 300px; background: rgba(245,158,11,.04); top:40%; left:40%; }
+
+/* ── Layout ── */
+.wrap { position: relative; z-index: 1; max-width: 1040px; margin: 0 auto; padding: 0 24px; }
+
+/* ── Nav ── */
+nav {
+  padding: 20px 0;
+  display: flex; align-items: center; gap: 10px;
+}
+.logo-circle {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--teal);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Fraunces', serif;
+  font-size: 16px; font-weight: 700; color: var(--white);
+  flex-shrink: 0;
+}
+.logo-text { font-size: 18px; font-weight: 700; letter-spacing: -0.3px; }
+.logo-text span { color: var(--tealBr); }
+.nav-badge {
+  margin-left: auto;
+  background: rgba(50,188,173,.12);
+  border: 1px solid rgba(50,188,173,.25);
+  color: var(--tealBr);
+  font-size: 11px; font-weight: 600;
+  padding: 4px 12px; border-radius: 100px;
+  letter-spacing: .5px;
+}
+
+/* ── Hero ── */
+.hero { padding: 60px 0 48px; }
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(50,188,173,.1); border: 1px solid rgba(50,188,173,.2);
+  border-radius: 100px; padding: 6px 16px;
+  font-size: 11px; font-weight: 600; color: var(--tealBr);
+  letter-spacing: 1px; text-transform: uppercase;
+  margin-bottom: 24px;
+}
+.hero-eyebrow::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--tealBr); flex-shrink: 0;
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: .5; transform: scale(.8); }
+}
+
+h1 {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(36px, 5vw, 58px);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -1.5px;
+  margin-bottom: 20px;
+}
+h1 em { font-style: italic; color: var(--tealBr); }
+
+.hero-sub {
+  font-size: 16px; color: var(--muted); line-height: 1.7;
+  max-width: 560px; margin-bottom: 36px;
+}
+
+/* Credential strip */
+.cred-strip {
+  display: flex; align-items: center; gap: 8px;
+  flex-wrap: wrap;
+  padding: 12px 16px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(50,188,173,.15);
+  border-radius: 12px;
+  font-size: 12px; color: var(--muted);
+  margin-bottom: 56px;
+}
+.cred-strip strong { color: var(--white); }
+.cred-sep { color: rgba(255,255,255,.15); }
+
+/* ── Section title ── */
+.section-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 2.5px;
+  text-transform: uppercase; color: var(--muted);
+  margin-bottom: 20px;
+}
+
+/* ── Demo cards ── */
+.cards { display: grid; gap: 16px; margin-bottom: 64px; }
+
+.card {
+  background: var(--ink2);
+  border: 1px solid rgba(50,188,173,.12);
+  border-radius: 20px;
+  overflow: hidden;
+  transition: border-color .25s, transform .25s, box-shadow .25s;
+  cursor: pointer;
+  text-decoration: none; color: inherit;
+  display: block;
+}
+.card:hover {
+  border-color: rgba(50,188,173,.35);
+  transform: translateY(-3px);
+  box-shadow: 0 20px 60px rgba(0,0,0,.35);
+}
+.card:active { transform: translateY(-1px); }
+
+/* Featured card (main prototype) */
+.card-featured {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: start;
+  gap: 0;
+}
+@media (max-width: 640px) {
+  .card-featured { grid-template-columns: 1fr; }
+}
+
+.card-body { padding: 28px 32px; }
+.card-tag {
+  display: inline-block;
+  font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 4px 10px; border-radius: 6px;
+  margin-bottom: 14px;
+}
+.tag-full  { background: rgba(50,188,173,.15); color: var(--tealBr); }
+.tag-admin { background: rgba(245,158,11,.15);  color: var(--amber); }
+.tag-learner { background: rgba(139,92,246,.15); color: var(--purple); }
+
+.card h2 {
+  font-family: 'Fraunces', serif;
+  font-size: 22px; font-weight: 700;
+  line-height: 1.25;
+  margin-bottom: 8px; letter-spacing: -.3px;
+}
+.card-sub {
+  font-size: 13px; color: var(--muted); line-height: 1.65;
+  margin-bottom: 20px; max-width: 440px;
+}
+
+/* Role pills */
+.roles { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+.role-pill {
+  display: flex; align-items: center; gap: 7px;
+  padding: 6px 12px;
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 100px;
+  font-size: 11.5px; font-weight: 500;
+}
+.role-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+.creds-box {
+  background: rgba(0,0,0,.2);
+  border: 1px solid rgba(50,188,173,.1);
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-size: 12px;
+}
+.creds-box .cred-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 4px 0;
+}
+.creds-box .cred-row + .cred-row {
+  border-top: 1px solid rgba(255,255,255,.05);
+  margin-top: 4px;
+}
+.cred-user {
+  width: 28px; height: 28px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px; font-weight: 800; flex-shrink: 0;
+}
+.cred-name { font-weight: 600; color: var(--white); flex: 1; }
+.cred-role-label { color: var(--muted); }
+.cred-login {
+  font-family: 'Courier New', monospace;
+  background: rgba(50,188,173,.1);
+  color: var(--tealBr);
+  padding: 2px 8px; border-radius: 5px;
+  font-size: 11px;
+}
+
+/* Right side of featured card — visual preview */
+.card-preview {
+  padding: 28px 28px 28px 0;
+  display: flex; flex-direction: column; gap: 8px;
+  align-items: flex-end;
+}
+@media (max-width: 640px) { .card-preview { display: none; } }
+
+.preview-screen {
+  background: var(--ink3);
+  border: 1px solid rgba(50,188,173,.15);
+  border-radius: 12px;
+  padding: 12px 14px;
+  width: 200px;
+}
+.preview-screen + .preview-screen { width: 180px; opacity: .6; }
+.ps-bar { height: 4px; border-radius: 2px; margin-bottom: 10px; }
+.ps-line { height: 8px; border-radius: 4px; background: rgba(255,255,255,.07); margin-bottom: 6px; }
+.ps-line.w80 { width: 80%; }
+.ps-line.w60 { width: 60%; }
+.ps-line.w40 { width: 40%; }
+.ps-line.w90 { width: 90%; }
+.ps-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-top: 8px; }
+.ps-box { height: 30px; border-radius: 6px; background: rgba(50,188,173,.08); }
+
+/* CTA button */
+.btn-go {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 13px 22px;
+  border-radius: 12px;
+  font-size: 13px; font-weight: 700;
+  text-decoration: none;
+  transition: all .2s;
+  margin-top: 6px;
+}
+.btn-go-primary {
+  background: linear-gradient(135deg, var(--teal), #28A99B);
+  color: var(--white);
+  box-shadow: 0 4px 20px rgba(14,155,134,.3);
+}
+.btn-go-primary:hover { filter: brightness(1.1); box-shadow: 0 6px 28px rgba(14,155,134,.45); }
+.btn-go-secondary {
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.12);
+  color: var(--white);
+}
+.btn-go-secondary:hover { background: rgba(255,255,255,.1); }
+.btn-go svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+/* Small cards row */
+.cards-small { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 600px) { .cards-small { grid-template-columns: 1fr; } }
+
+.card-small .card-body { padding: 24px; }
+.card-small h2 { font-size: 18px; }
+.card-small .card-sub { margin-bottom: 16px; }
+
+/* Feature dots */
+.feature-list {
+  display: flex; flex-direction: column; gap: 6px;
+  margin-bottom: 20px;
+}
+.feat-item {
+  display: flex; align-items: flex-start; gap: 8px;
+  font-size: 12px; color: var(--muted); line-height: 1.5;
+}
+.feat-item::before {
+  content: ''; width: 5px; height: 5px; border-radius: 50%;
+  background: var(--tealBr); flex-shrink: 0; margin-top: 5px;
+}
+
+/* ── Divider ── */
+.divider { border: none; border-top: 1px solid rgba(50,188,173,.1); margin: 48px 0; }
+
+/* ── Note section ── */
+.note {
+  background: rgba(50,188,173,.06);
+  border: 1px solid rgba(50,188,173,.15);
+  border-radius: 16px;
+  padding: 24px 28px;
+  display: flex; gap: 16px; align-items: flex-start;
+  margin-bottom: 48px;
+}
+.note-icon {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: rgba(50,188,173,.15);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; font-size: 16px;
+}
+.note-body h3 { font-size: 14px; font-weight: 700; color: var(--tealBr); margin-bottom: 5px; }
+.note-body p { font-size: 13px; color: var(--muted); line-height: 1.65; }
+
+/* ── Footer ── */
+footer {
+  border-top: 1px solid rgba(50,188,173,.1);
+  padding: 28px 0 40px;
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 12px;
+}
+footer .left { font-size: 13px; color: var(--muted); }
+footer .left strong { color: var(--tealBr); }
+footer .right { font-size: 12px; color: rgba(255,255,255,.2); }
+
+/* ── Hover accent on cards ── */
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0; border-radius: 20px;
+  background: linear-gradient(135deg, rgba(50,188,173,.04), transparent 60%);
+  opacity: 0; transition: opacity .3s;
+  pointer-events: none;
+}
+.card { position: relative; }
+.card:hover::before { opacity: 1; }
+</style>
+</head>
+<body>
+
+<div class="bg">
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+</div>
+
+<div class="wrap">
+
+  <!-- Nav -->
+  <nav>
+    <div class="logo-circle">a</div>
+    <div class="logo-text">appy<span>class</span></div>
+    <div class="nav-badge">INTERACTIVE DEMO</div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-eyebrow">Prototype · All roles · No login required</div>
+    <h1>The Training App<br><em>Every School Deserves.</em></h1>
+    <p class="hero-sub">
+      Explore AppyClass from every angle — school admin, trainer, and learner.
+      All prototypes are fully interactive. Click around freely.
+    </p>
+    <div class="cred-strip">
+      <strong>Quick start:</strong>
+      Open the full prototype below
+      <span class="cred-sep">·</span>
+      Type any of the usernames on the login screen
+      <span class="cred-sep">·</span>
+      Password is not required
+    </div>
+  </section>
+
+  <!-- Main prototype card -->
+  <div class="section-label">Full Platform Prototype</div>
+  <div class="cards" style="margin-bottom:16px;">
+    <a href="AppyClass_Redesigned.html" class="card card-featured">
+      <div class="card-body">
+        <div class="card-tag tag-full">All 5 Roles</div>
+        <h2>AppyClass — Full Platform</h2>
+        <p class="card-sub">
+          Explore the complete platform from every role. Switch between HQ admin, school admin, trainer, and learner — all in one prototype.
+        </p>
+
+        <div class="roles">
+          <div class="role-pill">
+            <div class="role-dot" style="background:#F59E0B"></div>
+            Peter · HQ Admin
+          </div>
+          <div class="role-pill">
+            <div class="role-dot" style="background:#32BCAD"></div>
+            Grace · School Admin
+          </div>
+          <div class="role-pill">
+            <div class="role-dot" style="background:#10B981"></div>
+            Anna · Trainer
+          </div>
+          <div class="role-pill">
+            <div class="role-dot" style="background:#F43F5E"></div>
+            Paul · Trainer
+          </div>
+          <div class="role-pill">
+            <div class="role-dot" style="background:#8B5CF6"></div>
+            Joshua · Learner
+          </div>
+        </div>
+
+        <div class="creds-box">
+          <div style="font-size:11px;font-weight:700;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;">Login credentials</div>
+          <div class="cred-row">
+            <div class="cred-user" style="background:linear-gradient(135deg,#F59E0B,#D97706)">P</div>
+            <span class="cred-name">Peter</span>
+            <span class="cred-role-label">HQ Admin</span>
+            <span class="cred-login">peter</span>
+          </div>
+          <div class="cred-row">
+            <div class="cred-user" style="background:linear-gradient(135deg,#32BCAD,#28A99B)">G</div>
+            <span class="cred-name">Grace</span>
+            <span class="cred-role-label">School Admin</span>
+            <span class="cred-login">grace</span>
+          </div>
+          <div class="cred-row">
+            <div class="cred-user" style="background:linear-gradient(135deg,#10B981,#059669)">A</div>
+            <span class="cred-name">Anna</span>
+            <span class="cred-role-label">Trainer</span>
+            <span class="cred-login">anna</span>
+          </div>
+          <div class="cred-row">
+            <div class="cred-user" style="background:linear-gradient(135deg,#F43F5E,#E11D48)">P</div>
+            <span class="cred-name">Paul</span>
+            <span class="cred-role-label">Trainer</span>
+            <span class="cred-login">paul</span>
+          </div>
+          <div class="cred-row">
+            <div class="cred-user" style="background:linear-gradient(135deg,#8B5CF6,#6D28D9)">J</div>
+            <span class="cred-name">Joshua</span>
+            <span class="cred-role-label">Learner</span>
+            <span class="cred-login">joshua</span>
+          </div>
+        </div>
+
+        <a href="AppyClass_Redesigned.html" class="btn-go btn-go-primary" style="margin-top:20px;display:inline-flex;">
+          Open Full Prototype
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+
+      <div class="card-preview">
+        <div class="preview-screen">
+          <div class="ps-bar" style="background:linear-gradient(90deg,var(--teal),var(--tealBr));width:60%;"></div>
+          <div class="ps-line w90"></div>
+          <div class="ps-line w60"></div>
+          <div class="ps-line w80"></div>
+          <div class="ps-grid">
+            <div class="ps-box" style="background:rgba(50,188,173,.12);"></div>
+            <div class="ps-box" style="background:rgba(245,158,11,.1);"></div>
+            <div class="ps-box"></div>
+            <div class="ps-box"></div>
+          </div>
+        </div>
+        <div class="preview-screen">
+          <div class="ps-bar" style="background:rgba(139,92,246,.4);width:40%;"></div>
+          <div class="ps-line w80"></div>
+          <div class="ps-line w40"></div>
+          <div class="ps-line w60"></div>
+        </div>
+      </div>
+    </a>
+  </div>
+
+  <!-- Two smaller cards -->
+  <div class="cards-small" style="margin-bottom:56px;">
+
+    <!-- GSI card -->
+    <a href="GraceStrings_GSI.html" class="card card-small">
+      <div class="card-body">
+        <div class="card-tag tag-admin">School Admin</div>
+        <h2>GraceStrings Admin</h2>
+        <p class="card-sub">
+          The school owner view. Manage classes, learners, revenue, AI assessment settings, and white-label configuration.
+        </p>
+        <div class="feature-list">
+          <div class="feat-item">Dashboard with live revenue & attendance</div>
+          <div class="feat-item">Class management across 4 levels</div>
+          <div class="feat-item">AI assessment & learner placement</div>
+          <div class="feat-item">White-label brand settings</div>
+          <div class="feat-item">Trainer management & payouts</div>
+        </div>
+        <div class="creds-box" style="margin-bottom:14px;">
+          <div class="cred-row">
+            <div class="cred-user" style="background:linear-gradient(135deg,#32BCAD,#28A99B)">G</div>
+            <span class="cred-name">Grace</span>
+            <span class="cred-role-label">School Admin</span>
+            <span class="cred-login">grace</span>
+          </div>
+        </div>
+        <span class="btn-go btn-go-secondary">
+          Open Admin View
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </span>
+      </div>
+    </a>
+
+    <!-- Learner app card -->
+    <a href="GraceStrings_Learner_App.html" class="card card-small">
+      <div class="card-body">
+        <div class="card-tag tag-learner">Learner App</div>
+        <h2>GraceStrings Learner</h2>
+        <p class="card-sub">
+          The learner mobile experience. Progress tracking, AI practice plans, 1:1 booking, streak system, and community.
+        </p>
+        <div class="feature-list">
+          <div class="feat-item">Home dashboard with streak & XP</div>
+          <div class="feat-item">Progress & skill breakdown</div>
+          <div class="feat-item">AI-generated practice plans</div>
+          <div class="feat-item">1:1 session booking</div>
+          <div class="feat-item">Leaderboard & community feed</div>
+        </div>
+        <div class="creds-box" style="margin-bottom:14px;">
+          <div class="cred-row">
+            <div class="cred-user" style="background:linear-gradient(135deg,#8B5CF6,#6D28D9)">J</div>
+            <span class="cred-name">Joshua</span>
+            <span class="cred-role-label">Learner</span>
+            <span class="cred-login">joshua</span>
+          </div>
+        </div>
+        <span class="btn-go btn-go-secondary">
+          Open Learner App
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </span>
+      </div>
+    </a>
+
+  </div>
+
+  <hr class="divider"/>
+
+  <!-- Note -->
+  <div class="note">
+    <div class="note-icon">💡</div>
+    <div class="note-body">
+      <h3>This is a prototype, not a live app</h3>
+      <p>All data is static and pre-filled for demonstration purposes. No account or payment details are required. The full AppyClass platform will be built on Next.js + Supabase — development begins immediately upon funding. <strong style="color:var(--tealBr);">Raise: S$500K · 16-week build · Launch Q3 2026.</strong></p>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="left">
+      <strong>appyclass</strong> · The Training App Every School Deserves · 
+      <a href="mailto:hello@appyclass.net" style="color:var(--muted);text-decoration:none;">hello@appyclass.net</a>
+    </div>
+    <div class="right">Confidential — For authorised investors only</div>
+  </footer>
+
+</div>
+</body>
+</html>
