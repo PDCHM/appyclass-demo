@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>AppyClass — Interactive Demo</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0A1F1C;color:#fff;padding:20px;max-width:640px;margin:0 auto}
+a{color:inherit;text-decoration:none}
+.logo{display:flex;align-items:center;gap:10px;padding:16px 0 28px}
+.logo-name{font-size:17px;font-weight:700}
+.logo-name span{color:#32BCAD}
+.badge{display:inline-block;background:rgba(50,188,173,.15);border:1px solid rgba(50,188,173,.3);color:#32BCAD;font-size:11px;font-weight:600;padding:4px 12px;border-radius:20px;margin-bottom:18px;letter-spacing:.5px}
+h1{font-size:28px;font-weight:700;line-height:1.2;margin-bottom:10px}
+h1 em{font-style:italic;color:#32BCAD}
+.sub{font-size:14px;color:#7AADA8;line-height:1.6;margin-bottom:20px}
+.qs{background:#132820;border:1px solid rgba(50,188,173,.15);border-radius:10px;padding:12px 16px;font-size:12px;color:#7AADA8;margin-bottom:32px;line-height:1.7}
+.qs strong{color:#fff}
+.sec-label{font-size:10px;font-weight:700;letter-spacing:2px;color:#7AADA8;text-transform:uppercase;margin-bottom:14px}
+.card{background:#132820;border:1px solid rgba(50,188,173,.15);border-radius:14px;padding:22px;margin-bottom:14px}
+.card-tag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 10px;border-radius:6px;margin-bottom:12px}
+.tag-full{background:rgba(50,188,173,.15);color:#32BCAD}
+.tag-admin{background:rgba(245,158,11,.15);color:#F59E0B}
+.tag-learner{background:rgba(139,92,246,.15);color:#8B5CF6}
+.card h2{font-size:18px;font-weight:700;margin-bottom:6px}
+.card p{font-size:13px;color:#7AADA8;line-height:1.6;margin-bottom:16px}
+.roles{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:18px}
+.role{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:5px 11px;font-size:12px}
+.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.creds{background:rgba(0,0,0,.25);border:1px solid rgba(50,188,173,.1);border-radius:10px;padding:12px 14px;margin-bottom:18px}
+.creds-title{font-size:10px;font-weight:700;letter-spacing:1px;color:#7AADA8;text-transform:uppercase;margin-bottom:10px}
+.cred{display:flex;align-items:center;gap:10px;padding:5px 0;border-top:1px solid rgba(255,255,255,.05)}
+.cred:first-of-type{border-top:none}
+.av{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0}
+.cred-name{font-size:12px;font-weight:600;flex:1}
+.cred-role{font-size:11px;color:#7AADA8;min-width:90px}
+.cred-login{font-family:monospace;background:rgba(50,188,173,.1);color:#32BCAD;padding:2px 8px;border-radius:5px;font-size:11px}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:13px 20px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;border:none;width:100%}
+.btn-teal{background:#0E9B86;color:#fff}
+.btn-amber{background:#F59E0B;color:#fff}
+.btn-purple{background:#8B5CF6;color:#fff}
+.cards-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:32px}
+@media(max-width:480px){.cards-row{grid-template-columns:1fr}}
+.card-sm{background:#132820;border:1px solid rgba(50,188,173,.15);border-radius:14px;padding:18px}
+.feat-list{list-style:none;margin-bottom:16px}
+.feat-list li{font-size:12px;color:#7AADA8;padding:3px 0 3px 12px;position:relative}
+.feat-list li::before{content:'·';position:absolute;left:0;color:#32BCAD}
+hr{border:none;border-top:1px solid rgba(50,188,173,.1);margin:28px 0}
+.note{background:rgba(50,188,173,.06);border:1px solid rgba(50,188,173,.15);border-radius:12px;padding:16px 18px;margin-bottom:28px}
+.note h3{font-size:13px;font-weight:700;color:#32BCAD;margin-bottom:5px}
+.note p{font-size:12px;color:#7AADA8;line-height:1.6}
+.note strong{color:#32BCAD}
+footer{font-size:12px;color:#7AADA8;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;padding-bottom:20px}
+</style>
+</head>
+<body>
+
+<div class="logo">
+  <img src="data:image/jpeg;base64,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" style="width:32px;height:32px;border-radius:50%;object-fit:cover;flex-shrink:0;"/>
+  <div class="logo-name"><b>appy</b><span style="font-weight:300">class</span></div>
+</div>
+
+<div class="badge">INTERACTIVE DEMO</div>
+<h1>The Training App<br><em>Every School Deserves.</em></h1>
+<p class="sub">Explore AppyClass from every angle — school admin, trainer, and learner. All prototypes are fully interactive.</p>
+
+<div class="qs">
+  <strong>Quick start:</strong> Open any prototype below · Type the username on the login screen · No password needed
+</div>
+
+<div class="sec-label">Full Platform Prototype</div>
+
+<div class="card">
+  <div class="card-tag tag-full">All 5 Roles</div>
+  <h2>AppyClass — Full Platform</h2>
+  <p>Switch between HQ admin, school admin, trainer and learner — all in one prototype.</p>
+  <div class="roles">
+    <div class="role"><div class="dot" style="background:#F59E0B"></div>Peter · HQ Admin</div>
+    <div class="role"><div class="dot" style="background:#32BCAD"></div>Grace · School Admin</div>
+    <div class="role"><div class="dot" style="background:#10B981"></div>Anna · Trainer</div>
+    <div class="role"><div class="dot" style="background:#F43F5E"></div>Paul · Trainer</div>
+    <div class="role"><div class="dot" style="background:#8B5CF6"></div>Joshua · Learner</div>
+  </div>
+  <div class="creds">
+    <div class="creds-title">Login Credentials</div>
+    <div class="cred"><div class="av" style="background:#F59E0B">P</div><span class="cred-name">Peter</span><span class="cred-role">HQ Admin</span><span class="cred-login">peter</span></div>
+    <div class="cred"><div class="av" style="background:#0E9B86">G</div><span class="cred-name">Grace</span><span class="cred-role">School Admin</span><span class="cred-login">grace</span></div>
+    <div class="cred"><div class="av" style="background:#10B981">A</div><span class="cred-name">Anna</span><span class="cred-role">Trainer</span><span class="cred-login">anna</span></div>
+    <div class="cred"><div class="av" style="background:#F43F5E">P</div><span class="cred-name">Paul</span><span class="cred-role">Trainer</span><span class="cred-login">paul</span></div>
+    <div class="cred"><div class="av" style="background:#8B5CF6">J</div><span class="cred-name">Joshua</span><span class="cred-role">Learner</span><span class="cred-login">joshua</span></div>
+  </div>
+  <a href="AppyClass_Redesigned.html"><button class="btn btn-teal">Open Full Prototype →</button></a>
+</div>
+
+<div class="cards-row">
+  <div class="card-sm">
+    <div class="card-tag tag-admin">School Admin</div>
+    <h2 style="font-size:16px;margin-bottom:6px">GraceStrings Admin</h2>
+    <p style="font-size:12px;color:#7AADA8;margin-bottom:12px">School owner view. Classes, revenue, AI assessment, white-label config.</p>
+    <ul class="feat-list">
+      <li>Revenue dashboard</li>
+      <li>Class management</li>
+      <li>AI assessment</li>
+      <li>Learner profiles</li>
+    </ul>
+    <div class="creds" style="margin-bottom:14px">
+      <div class="cred" style="border-top:none"><div class="av" style="background:#0E9B86">G</div><span class="cred-name">Grace</span><span class="cred-login">grace</span></div>
+    </div>
+    <a href="GraceStrings_GSI.html"><button class="btn btn-amber">Open Admin →</button></a>
+  </div>
+  <div class="card-sm">
+    <div class="card-tag tag-learner">Learner App</div>
+    <h2 style="font-size:16px;margin-bottom:6px">GraceStrings Learner</h2>
+    <p style="font-size:12px;color:#7AADA8;margin-bottom:12px">Mobile learner experience. Progress, practice plans, 1:1 booking, streaks.</p>
+    <ul class="feat-list">
+      <li>XP &amp; streak system</li>
+      <li>AI practice plans</li>
+      <li>1:1 booking</li>
+      <li>Leaderboard</li>
+    </ul>
+    <div class="creds" style="margin-bottom:14px">
+      <div class="cred" style="border-top:none"><div class="av" style="background:#8B5CF6">J</div><span class="cred-name">Joshua</span><span class="cred-login">joshua</span></div>
+    </div>
+    <a href="GraceStrings_Learner_App.html"><button class="btn btn-purple">Open Learner →</button></a>
+  </div>
+</div>
+
+<hr/>
+
+<div class="note">
+  <h3>This is a prototype, not a live app</h3>
+  <p>All data is pre-filled for demo purposes. No account or payment details needed. Full platform on Next.js + Supabase. <strong>Raise: S$500K · 16-week build · Launch Q3 2026.</strong></p>
+</div>
+
+<footer>
+  <span><strong style="color:#32BCAD">appyclass</strong> · hello@appyclass.net</span>
+  <span>Confidential — Authorised investors only</span>
+</footer>
+
+</body>
+</html>
